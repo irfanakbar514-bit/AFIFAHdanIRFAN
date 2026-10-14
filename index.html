@@ -547,10 +547,18 @@
                             <label style="display: block; color: var(--gold); font-size: 0.8rem; margin-bottom: 8px;">DOA / UCAPAN</label>
                             <textarea id="rsvp_message" rows="4" placeholder="Tulis doa Anda..." style="width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444; background: #000; color: #fff;" required></textarea>
                         </div>
-                        <button type="button" onclick="kirimPesanWA()" class="btn-open-undangan" style="width: 100%; padding: 20px; border-radius: 15px; font-size: 0.9rem;">
+                        <button type="button" onclick="kirimUcapan(event)" class="btn-open-undangan" style="width: 100%; padding: 20px; border-radius: 15px; font-size: 0.9rem;">
                             <i class="fas fa-paper-plane" style="margin-right: 10px;"></i> KIRIM DOA RESTU
                         </button>
                     </form>
+
+                    <!-- KOTAK MENAMPILKAN UCAPAN & DOA TAMU -->
+                    <div class="ucapan-container" style="margin-top: 35px; background: rgba(0,0,0,0.5); border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; padding: 20px; max-height: 400px; overflow-y: auto; text-align: left;">
+                        <h3 style="color: var(--gold); font-size: 1.1rem; text-align: center; margin-bottom: 20px; font-family: 'Playfair Display', serif;">Ucapan & Doa Restu</h3>
+                        <div id="daftarUcapan">
+                            <p style="text-align: center; color: #888; font-size: 0.85rem;">Memuat ucapan...</p>
+                        </div>
+                    </div>
                 </div> 
             </div> 
         </section>
@@ -759,7 +767,12 @@
             }
         })();
 
-        function kirimPesanWA() {
+        /* ============================================================
+           SISTEM RSVP GOOGLE SHEETS & UCAPAN REAL-TIME
+           ============================================================ */
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyHVM6KjOmev9fM_-6ZZKQEJ5GVCLPHoc_eoQ2wWMNHaRlLPOzl-52WJTVHS4RBiuQ/exec';
+
+        function kirimUcapan(event) {
             const nama = document.querySelector('#rsvp_name').value.trim();
             const status = document.querySelector('#rsvp_status').value;
             const tamu = document.querySelector('#rsvp_guest').value || "1";
@@ -770,16 +783,67 @@
                 return;
             }
 
-            const teksPesan = "Halo Irfan & Afifah,\n\n" +
-                              "*KONFIRMASI KEHADIRAN*\n" +
-                              "Nama: " + nama + "\n" +
-                              "Status: " + status + "\n" +
-                              "Jumlah: " + tamu + " Orang\n" +
-                              "Pesan: " + pesan;
+            const btn = event.target.closest('button');
+            const oldText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i> MENGIRIM...';
+            btn.disabled = true;
 
-            const urlWA = "https://api.whatsapp.com/send?phone=6282278199948&text=" + encodeURIComponent(teksPesan);
-            window.open(urlWA, '_blank');
+            const formData = { nama: nama, status: status, jumlah: tamu, pesan: pesan };
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            }).then(() => {
+                document.querySelector('#weddingRsvp').reset();
+                alert("Terima kasih! Doa dan konfirmasi kehadiran Anda berhasil dikirim.");
+                
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+                
+                muatUcapan();
+            }).catch(error => {
+                console.error('Error!', error.message);
+                alert("Gagal mengirim ucapan, silakan coba lagi.");
+                btn.innerHTML = oldText;
+                btn.disabled = false;
+            });
         }
+
+        function muatUcapan() {
+            fetch(scriptURL)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('daftarUcapan');
+                container.innerHTML = "";
+                
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #888; font-size: 0.85rem;">Belum ada ucapan. Jadilah yang pertama memberikan doa!</p>';
+                    return;
+                }
+
+                data.reverse().forEach(item => {
+                    const badgeColor = item.status === 'Hadir' ? '#25D366' : '#d90429';
+                    const card = `
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.15); border-radius: 12px; padding: 15px; margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <strong style="color: var(--gold); font-size: 0.9rem;">${item.nama}</strong>
+                                <span style="font-size: 0.65rem; background: ${badgeColor}; color: #fff; padding: 3px 8px; border-radius: 20px; font-weight: bold;">${item.status}</span>
+                            </div>
+                            <p style="font-size: 0.85rem; color: #ddd; margin: 0; line-height: 1.4; word-break: break-word;">${item.pesan}</p>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+            })
+            .catch(err => {
+                console.log('Gagal memuat ucapan', err);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            muatUcapan();
+        });
 
         function createButterfly(isBurst = false) {
             const bf = document.createElement('div');
