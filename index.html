@@ -677,6 +677,26 @@
             else toggleAudio('play');
         });
 
+        // Otomatis pause lagu saat pindah tab / buka tab baru, dan play lagi saat kembali
+        document.addEventListener('visibilitychange', function() {
+            // Hanya jalankan jika undangan sudah dibuka (mainContent aktif)
+            if (mainContent.classList.contains('active')) {
+                if (document.hidden) {
+                    // Jika pengguna pindah tab / minimalkan browser
+                    if (isPlaying) {
+                        bgm.pause();
+                        musicIcon.classList.remove('fa-spin');
+                    }
+                } else {
+                    // Jika pengguna kembali ke tab undangan
+                    if (isPlaying) {
+                        bgm.play().catch(e => console.log("Gagal memutar audio otomatis."));
+                        musicIcon.classList.add('fa-spin');
+                    }
+                }
+            }
+        });
+
         setInterval(function() {
             const now = new Date().getTime();
             const dist = weddingDate - now;
