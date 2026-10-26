@@ -220,9 +220,10 @@
                 </div>
 
                 <div class="mempelai-flex-wrapper">
+                    <!-- MEMPELAI PRIA -->
                     <div class="mempelai-item" data-aos="fade-right" style="margin-bottom: 80px;">
                         <div class="frame-minang">
-                            <img src="mempelai.webp" alt="Irfan Yama Akbar">
+                            <img src="mempelai-pria.jpg" alt="Irfan Yama Akbar">
                         </div>
                         <div class="mempelai-info">
                             <h3 class="font-cursive text-gold" style="font-size: 2.5rem; margin-bottom: 5px;">Irfan Yama Akbar</h3>
@@ -243,9 +244,10 @@
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent);"></div>
                     </div>
 
+                    <!-- MEMPELAI WANITA -->
                     <div class="mempelai-item" data-aos="fade-left" style="margin-top: 40px;">
                         <div class="frame-minang">
-                            <img src="mempelai.webp" alt="Nur Afifah Tri Oktavia">
+                            <img src="mempelai-wanita.jpg" alt="Nur Afifah Tri Oktavia">
                         </div>
                         <div class="mempelai-info">
                             <h3 class="font-cursive text-gold" style="font-size: 2.5rem; margin-bottom: 5px;">Nur Afifah Tri Oktavia</h3>
@@ -264,7 +266,7 @@
             </div>
         </section>
 
-        <section id="countdown" style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('mempelai.webp') center/cover; padding: 100px 0;">
+        <section id="countdown" style="background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('mempelai-pria.jpg') center/cover; padding: 100px 0;">
             <div class="container">
                 <div data-aos="fade-up">
                     <h2 style="font-size: 1rem; letter-spacing: 5px; margin-bottom: 40px; color: var(--gold-light);">MENGHITUNG HARI MENUJU ACARA</h2>
@@ -392,25 +394,26 @@
                     </video>
                 </div>
 
+                <!-- GALERI FOTO 1 S.D 4 -->
                 <div class="gallery-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; align-items: center;">
                     <div class="gallery-item" data-aos="fade-up">
                         <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(212,175,55,0.3);">
-                            <img src="mempelai.webp" alt="Galeri 1" style="width: 100%; height: auto; display: block; filter: contrast(110%) brightness(90%);">
+                            <img src="galeri1.jpg" alt="Galeri 1" style="width: 100%; height: auto; display: block; filter: contrast(110%) brightness(90%);">
                         </div>
                     </div>
                     <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
                         <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(212,175,55,0.3);">
-                            <img src="mempelai.webp" alt="Galeri 2" style="width: 100%; height: auto; display: block;">
+                            <img src="galeri2.jpg" alt="Galeri 2" style="width: 100%; height: auto; display: block;">
                         </div>
                     </div>
                     <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
                         <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(212,175,55,0.3);">
-                            <img src="mempelai.webp" alt="Galeri 3" style="width: 100%; height: auto; display: block;">
+                            <img src="galeri3.jpg" alt="Galeri 3" style="width: 100%; height: auto; display: block;">
                         </div>
                     </div>
                     <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
                         <div style="border-radius: 20px; overflow: hidden; border: 1px solid rgba(212,175,55,0.3);">
-                            <img src="mempelai.webp" alt="Galeri 4" style="width: 100%; height: auto; display: block;">
+                            <img src="galeri4.jpg" alt="Galeri 4" style="width: 100%; height: auto; display: block;">
                         </div>
                     </div>
                 </div>
@@ -560,7 +563,7 @@
                     <div style="flex: 1; background: #ffcc00;"></div>
                 </div>
 
-                <div style="background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('mempelai.webp') center/cover no-repeat; padding: 60px 25px; text-align: center;">
+                <div style="background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('mempelai-pria.jpg') center/cover no-repeat; padding: 60px 25px; text-align: center;">
                     <div class="closing-quote" data-aos="zoom-in" style="margin-bottom: 40px;">
                         <i class="fas fa-quote-left text-gold" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 15px;"></i>
                         <p style="font-size: 0.95rem; line-height: 1.8; font-style: italic; color: var(--gold-light);">
@@ -677,18 +680,14 @@
             else toggleAudio('play');
         });
 
-        // Otomatis pause lagu saat pindah tab / buka tab baru, dan play lagi saat kembali
         document.addEventListener('visibilitychange', function() {
-            // Hanya jalankan jika undangan sudah dibuka (mainContent aktif)
             if (mainContent.classList.contains('active')) {
                 if (document.hidden) {
-                    // Jika pengguna pindah tab / minimalkan browser
                     if (isPlaying) {
                         bgm.pause();
                         musicIcon.classList.remove('fa-spin');
                     }
                 } else {
-                    // Jika pengguna kembali ke tab undangan
                     if (isPlaying) {
                         bgm.play().catch(e => console.log("Gagal memutar audio otomatis."));
                         musicIcon.classList.add('fa-spin');
@@ -776,9 +775,6 @@
             }
         })();
 
-        /* ============================================================
-           SISTEM RSVP GOOGLE SHEETS & UCAPAN REAL-TIME
-           ============================================================ */
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyHVM6KjOmev9fM_-6ZZKQEJ5GVCLPHoc_eoQ2wWMNHaRlLPOzl-52WJTVHS4RBiuQ/exec';
 
         function kirimUcapan(event) {
